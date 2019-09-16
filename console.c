@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "console.h"
 
-/* see main.c for definition */
-
 unsigned char _getch(void) {
 	return getchar();
 }

@@ -1,30 +1,31 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <stdint.h>
 #include "globals.h"
 #include "console.h"
 
 /* see main.c for definition */
 
-int32 PCX; /* external view of PC                          */
-int32 AF;  /* AF register                                  */
-int32 BC;  /* BC register                                  */
-int32 DE;  /* DE register                                  */
-int32 HL;  /* HL register                                  */
-int32 IX;  /* IX register                                  */
-int32 IY;  /* IY register                                  */
-int32 PC;  /* program counter                              */
-int32 SP;  /* SP register                                  */
-int32 AF1; /* alternate AF register                        */
-int32 BC1; /* alternate BC register                        */
-int32 DE1; /* alternate DE register                        */
-int32 HL1; /* alternate HL register                        */
-int32 IFF; /* Interrupt Flip Flop                          */
-int32 IR;  /* Interrupt (upper) / Refresh (lower) register */
-int32 Status; /* Status of the CPU 0=running 1=end request 2=back to CCP */
-int32 Debug;
-int32 Break;
-int32 Step;
+int32_t PCX; /* external view of PC                          */
+int32_t AF;  /* AF register                                  */
+int32_t BC;  /* BC register                                  */
+int32_t DE;  /* DE register                                  */
+int32_t HL;  /* HL register                                  */
+int32_t IX;  /* IX register                                  */
+int32_t IY;  /* IY register                                  */
+int32_t PC;  /* program counter                              */
+int32_t SP;  /* SP register                                  */
+int32_t AF1; /* alternate AF register                        */
+int32_t BC1; /* alternate BC register                        */
+int32_t DE1; /* alternate DE register                        */
+int32_t HL1; /* alternate HL register                        */
+int32_t IFF; /* Interrupt Flip Flop                          */
+int32_t IR;  /* Interrupt (upper) / Refresh (lower) register */
+int32_t Status; /* Status of the CPU 0=running 1=end request 2=back to CCP */
+int32_t Debug;
+int32_t Break;
+int32_t Step;
 
 #ifdef iDEBUG
 FILE *iLogFile;
@@ -35,9 +36,9 @@ const char *iLogTxt;
 /*
 	Functions needed by the soft CPU implementation
 */
-void cpu_out(const uint32 Port, const uint32 Value);
+void cpu_out(const uint32_t Port, const uint32_t Value);
 
-uint32 cpu_in(const uint32 Port);
+uint32_t cpu_in(const uint32_t Port);
 
 /* Z80 Custom soft core */
 
@@ -67,7 +68,7 @@ uint32 cpu_in(const uint32 Port);
 #define SET_PV2(x)  ((temp == (x)) << 2)
 
 #define POP(x)  {                               \
-    register uint32 y = RAM_PP(SP);             \
+    register uint32_t y = RAM_PP(SP);             \
     x = y + (RAM_PP(SP) << 8);                  \
 }
 
@@ -81,7 +82,7 @@ uint32 cpu_in(const uint32 Port);
 
 #define CALLC(cond) {                           \
     if (cond) {                                 \
-        register uint32 adrr = GET_WORD(PC);    \
+        register uint32_t adrr = GET_WORD(PC);    \
         PUSH(PC + 2);                           \
         PC = adrr;                              \
     } else {                                    \

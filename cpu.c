@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "cpu.h"
 #include "console.h"
 
@@ -1204,7 +1205,7 @@ void Z80debug(void) {
 	static const char Flags[9] = "SZ5H3PNC";
 	uint8 J, I;
 	unsigned int bpoint;
-	uint8 loop = TRUE;
+	bool loop = true;
 
 	while (loop) {
 		pos = PC;
@@ -1245,10 +1246,10 @@ void Z80debug(void) {
 			_putch(ch);
 		switch(ch) {
 		case 't':
-			loop = FALSE;
+			loop = false;
 			break;
 		case 'c':
-			loop = FALSE;
+			loop = false;
 			_puts("\r\n");
 			Debug = 0;
 			break;
@@ -1313,7 +1314,7 @@ void Z80debug(void) {
 			}
 			break;
 		case 'T':
-			loop = FALSE;
+			loop = false;
 			Step = pos + 3; // This only works correctly with CALL
 							// If the called function messes with the stack, this will fail as well.
 			Debug = 0;

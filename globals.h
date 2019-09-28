@@ -15,11 +15,6 @@
 
 /* Some environment and type definitions */
 
-#ifndef TRUE
-#define FALSE 0
-#define TRUE 1
-#endif
-
 typedef signed char     int8;
 typedef signed short    int16;
 typedef signed int      int32;

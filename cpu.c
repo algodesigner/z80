@@ -1109,16 +1109,16 @@ x == (C - 1) & 0xff for IND
 
 z80 *z80_new() {
 	z80 *cpu = calloc(1, sizeof(z80));
-	Z80reset(cpu);
+	z80_reset(cpu);
 	return cpu;
 }
 
-void Z80reset(z80 *cpu) {
+void z80_reset(z80 *cpu) {
 	PC = 0;
 	IFF = 0;
 	IR = 0;
 	cpu->status = 0;
-	cpu->debug = 1;
+	cpu->debug = 0;
 	cpu->brk = -1;
 	cpu->step = -1;
 #if defined(DEBUG) || defined(iDEBUG)

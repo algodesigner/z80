@@ -139,7 +139,7 @@ uint32_t cpu_in(z80 *cpu, const uint32_t Port);
 #endif
 
 z80 *z80_new();
-void Z80reset(z80 *cpu);
+void z80_reset(z80 *cpu);
 void z80_debug(z80 *cpu);
 void z80_run(z80 *cpu);
 void Z80_destroy(z80 *cpu);

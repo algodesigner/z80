@@ -25,6 +25,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <stdint.h>
+
 /* Some definitions needed globally */
 #ifdef __MINGW32__
 #include <ctype.h>

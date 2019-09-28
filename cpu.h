@@ -27,6 +27,10 @@ typedef struct {
     int32_t brk;
     int32_t step;
 
+#if defined(DEBUG) || defined(iDEBUG)
+    int32_t watch;
+#endif
+
 #ifdef iDEBUG
     FILE *iLogFile;
     char iLogBuffer[16];

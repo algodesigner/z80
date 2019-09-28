@@ -1024,7 +1024,6 @@ static const char *CPMCalls[41] =
 	"Get/Set User", "Read Random", "Write Random", "Get File Size", "Set Random Record", "Reset Drive", "N/A", "N/A", "Write Random 0 fill"
 };
 
-int32_t Watch = -1;
 #endif
 
 /* Memory management    */
@@ -1098,18 +1097,21 @@ void Z80reset(z80 *cpu) {
 	cpu->debug = 1;
 	cpu->brk = -1;
 	cpu->step = -1;
+#if defined(DEBUG) || defined(iDEBUG)
+	cpu->watch = -1;
+#endif
 }
 
 #ifdef DEBUG
-void watchprint(uint16_t pos) {
+void watchprint(z80 *cpu, uint16_t pos) {
 	uint8_t I, J;
 	_puts("\r\n");
-	_puts("  Watch : "); _puthex16(Watch);
-	_puts(" = "); _puthex8(_RamRead(Watch)); _putcon(':'); _puthex8(_RamRead(Watch + 1));
+	_puts("  Watch : "); _puthex16(cpu->watch);
+	_puts(" = "); _puthex8(_RamRead(cpu->watch)); _putcon(':'); _puthex8(_RamRead(cpu->watch + 1));
 	_puts(" / ");
-	for (J = 0, I = _RamRead(Watch); J < 8; ++J, I <<= 1) _putcon(I & 0x80 ? '1' : '0');
+	for (J = 0, I = _RamRead(cpu->watch); J < 8; ++J, I <<= 1) _putcon(I & 0x80 ? '1' : '0');
 	_putcon(':');
-	for (J = 0, I = _RamRead(Watch + 1); J < 8; ++J, I <<= 1) _putcon(I & 0x80 ? '1' : '0');
+	for (J = 0, I = _RamRead(cpu->watch + 1); J < 8; ++J, I <<= 1) _putcon(I & 0x80 ? '1' : '0');
 }
 
 void memdump(uint16_t pos) {
@@ -1242,8 +1244,8 @@ void z80_debug(z80 *cpu) {
 			}
 		}
 
-		if (Watch != -1) {
-			watchprint(Watch);
+		if (cpu->watch != -1) {
+			watchprint(cpu, cpu->watch);
 		}
 
 		_puts("\r\n");
@@ -1329,9 +1331,9 @@ void z80_debug(z80 *cpu) {
 		case 'W':
 			_puts(" Addr: ");
 			scanf("%04x", &bpoint);
-			Watch = bpoint;
+			cpu->watch = bpoint;
 			_puts("Watch set to ");
-			_puthex16(Watch);
+			_puthex16(cpu->watch);
 			_puts("\r\n");
 			break;
 		case '?':

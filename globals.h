@@ -56,12 +56,12 @@
 #define MEMSIZE 64 * 1024 // RAM(plus ROM) needs to be 64K to avoid compatibility issues
 
 #ifdef RAM_FAST // Makes all function calls to memory access into direct RAM access (less calls / less code)
-static uint8_t RAM[MEMSIZE];
-#define _RamSysAddr(a)		&RAM[a]
-#define _RamRead(a)			RAM[a]
-#define _RamRead16(a)		((RAM[(a & 0xffff) + 1] << 8) | RAM[a & 0xffff])
-#define _RamWrite(a, v)		RAM[a] = v
-#define _RamWrite16(a, v)	RAM[a] = (v) & 0xff; RAM[a + 1] = (v) >> 8
+// static uint8_t RAM[MEMSIZE];
+#define _RamSysAddr(a)		&cpu->RAM[a]
+#define _RamRead(a)			cpu->RAM[a]
+#define _RamRead16(a)		((cpu->RAM[(a & 0xffff) + 1] << 8) | cpu->RAM[a & 0xffff])
+#define _RamWrite(a, v)		cpu->RAM[a] = v
+#define _RamWrite16(a, v)	cpu->RAM[a] = (v) & 0xff; cpu->RAM[a + 1] = (v) >> 8
 #endif
 
 #define tohex(x)	((x) < 10 ? (x) + 48 : (x) + 87)

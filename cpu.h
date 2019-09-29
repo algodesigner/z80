@@ -61,6 +61,9 @@ typedef struct {
     const char *iLogTxt;
 #endif
 
+#ifdef RAM_FAST
+    uint8_t RAM[MEMSIZE];
+#endif
 } z80;
 
 #define PCX cpu->pcx

@@ -1051,19 +1051,24 @@ static const char *CPMCalls[41] =
 #endif
 
 /* Memory management    */
-static uint8_t GET_BYTE(register uint32_t Addr) {
+#define GET_BYTE(a) get_byte(cpu, a)
+#define PUT_BYTE(a, v) put_byte(cpu, a, v)
+#define GET_WORD(a) get_word(cpu, a)
+#define PUT_WORD(a, v) put_word(cpu, a, v)
+
+static uint8_t get_byte(z80 *cpu, register uint32_t Addr) {
 	return _RamRead(Addr & ADDRMASK);
 }
 
-static void PUT_BYTE(register uint32_t Addr, register uint32_t Value) {
+static void put_byte(z80 *cpu, register uint32_t Addr, register uint32_t Value) {
 	_RamWrite(Addr & ADDRMASK, Value);
 }
 
-static uint16_t GET_WORD(register uint32_t a) {
+static uint16_t get_word(z80 *cpu, register uint32_t a) {
 	return GET_BYTE(a) | (GET_BYTE(a + 1) << 8);
 }
 
-static void PUT_WORD(register uint32_t Addr, register uint32_t Value) {
+static void put_word(z80 *cpu, register uint32_t Addr, register uint32_t Value) {
 	_RamWrite(Addr, Value);
 	_RamWrite(++Addr, Value >> 8);
 }
@@ -1138,7 +1143,7 @@ void watchprint(z80 *cpu, uint16_t pos) {
 	for (J = 0, I = _RamRead(cpu->watch + 1); J < 8; ++J, I <<= 1) _putcon(I & 0x80 ? '1' : '0');
 }
 
-void memdump(uint16_t pos) {
+void memdump(z80 *cpu, uint16_t pos) {
 	uint16_t h = pos;
 	uint16_t c = pos;
 	uint8_t l, i;
@@ -1169,7 +1174,7 @@ void memdump(uint16_t pos) {
 	}
 }
 
-uint8_t Disasm(uint16_t pos) {
+uint8_t disasm(z80 *cpu, uint16_t pos) {
 	const char *txt;
 	char jr;
 	uint8_t ch = _RamRead(pos);
@@ -1256,7 +1261,7 @@ void z80_debug(z80 *cpu) {
 		_puts(" PC:"); _puthex16(PC);
 		_puts(" : ");
 
-		Disasm(pos);
+		disasm(cpu, pos);
 
 		if (PC == 0x0005) {
 			if (LOW_REGISTER(BC) > 40) {
@@ -1287,19 +1292,19 @@ void z80_debug(z80 *cpu) {
 			cpu->debug = 0;
 			break;
 		case 'b':
-			_puts("\r\n"); memdump(BC); break;
+			_puts("\r\n"); memdump(cpu, BC); break;
 		case 'd':
-			_puts("\r\n"); memdump(DE); break;
+			_puts("\r\n"); memdump(cpu, DE); break;
 		case 'h':
-			_puts("\r\n"); memdump(HL); break;
+			_puts("\r\n"); memdump(cpu, HL); break;
 		case 'p':
-			_puts("\r\n"); memdump(PC & 0xFF00); break;
+			_puts("\r\n"); memdump(cpu, PC & 0xFF00); break;
 		case 's':
-			_puts("\r\n"); memdump(SP & 0xFF00); break;
+			_puts("\r\n"); memdump(cpu, SP & 0xFF00); break;
 		case 'x':
-			_puts("\r\n"); memdump(IX & 0xFF00); break;
+			_puts("\r\n"); memdump(cpu, IX & 0xFF00); break;
 		case 'y':
-			_puts("\r\n"); memdump(IY & 0xFF00); break;
+			_puts("\r\n"); memdump(cpu, IY & 0xFF00); break;
 /*
 		case 'a':
 			_puts("\r\n"); memdump(dmaAddr); break;
@@ -1311,7 +1316,7 @@ void z80_debug(z80 *cpu) {
 			while (I > 0) {
 				_puthex16(l);
 				_puts(" : ");
-				l += Disasm(l);
+				l += disasm(cpu, l);
 				_puts("\r\n");
 				--I;
 			}
@@ -1331,7 +1336,7 @@ void z80_debug(z80 *cpu) {
 		case 'D':
 			_puts(" Addr: ");
 			scanf("%04x", &bpoint);
-			memdump(bpoint);
+			memdump(cpu, bpoint);
 			break;
 		case 'L':
 			_puts(" Addr: ");
@@ -1341,7 +1346,7 @@ void z80_debug(z80 *cpu) {
 			while (I > 0) {
 				_puthex16(l);
 				_puts(" : ");
-				l += Disasm(l);
+				l += disasm(cpu, l);
 				_puts("\r\n");
 				--I;
 			}

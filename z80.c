@@ -1412,8 +1412,11 @@ void z80_run(z80 *cpu) {
 	/* main instruction fetch/decode loop */
 	while (!cpu->status) {	/* loop until status != 0 */
 
-		if (cpu->intercept)
+		if (cpu->intercept) {
 			cpu->intercept(cpu->intercept_ctx);
+            if (cpu->status)
+                break;
+        }
 #ifdef DEBUG
 		if (PC == cpu->brk) {
 			_puts(":BREAK at ");

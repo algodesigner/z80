@@ -5,3 +5,5 @@ Z80 CPU Emulator (with built-in debugger) forked and separated out from [RunCPM 
 The original `cpu.h` header file has been split into the `z80.h` interface definition and `z80.c` implementation.
 
 The processor state has been moved to the z80 class so that multiple CPU instances can be created in the same process to emulate multi-processor systems.
+
+The CP/M related has been either removed to commented out to make the processor class a touch more generic.

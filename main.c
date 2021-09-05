@@ -14,5 +14,5 @@ int main(int argc, char *argv[])
     cpu->debug = 1;
 	z80_set_intercept(cpu, cpu, intercept);
     z80_run(cpu);
-    Z80_destroy(cpu);
+    z80_destroy(cpu);
 }

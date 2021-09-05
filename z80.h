@@ -146,7 +146,7 @@ void z80_set_intercept(z80 *cpu, void *intercept_ctx,
 void z80_reset(z80 *cpu);
 void z80_debug(z80 *cpu);
 void z80_run(z80 *cpu);
-void Z80_destroy(z80 *cpu);
+void z80_destroy(z80 *cpu);
 
 #endif
 

@@ -4607,7 +4607,7 @@ end_decode:
 	;
 }
 
-void Z80_destroy(z80 *cpu) {
+void z80_destroy(z80 *cpu) {
 	free(cpu);
 }
 

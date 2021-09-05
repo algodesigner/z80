@@ -24,7 +24,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include "cpu.h"
+#include "z80.h"
 #include "console.h"
 
 void cpu_out(z80 *cpu, const uint32_t Port, const uint32_t Value) {
@@ -1118,6 +1118,13 @@ z80 *z80_new() {
 	return cpu;
 }
 
+void z80_set_intercept(z80 *cpu, void *intercept_ctx,
+        void (*intercept)(void *))
+{
+	cpu->intercept_ctx = intercept_ctx;
+	cpu->intercept = intercept;
+}
+
 void z80_reset(z80 *cpu) {
 	PC = 0;
 	IFF = 0;
@@ -1405,6 +1412,8 @@ void z80_run(z80 *cpu) {
 	/* main instruction fetch/decode loop */
 	while (!cpu->status) {	/* loop until status != 0 */
 
+		if (cpu->intercept)
+			cpu->intercept(cpu->intercept_ctx);
 #ifdef DEBUG
 		if (PC == cpu->brk) {
 			_puts(":BREAK at ");

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef CPU_H
-#define CPU_H
+#ifndef Z80_H
+#define Z80_H
 
 #include <stdint.h>
 #include "globals.h"
@@ -60,7 +60,8 @@ typedef struct {
     char iLogBuffer[16];
     const char *iLogTxt;
 #endif
-
+    void *intercept_ctx;
+    void (*intercept)(void *);
 #ifdef RAM_FAST
     uint8_t RAM[MEMSIZE];
 #endif
@@ -139,11 +140,13 @@ uint32_t cpu_in(z80 *cpu, const uint32_t Port);
     }                                           \
 }
 
-#endif
-
 z80 *z80_new();
+void z80_set_intercept(z80 *cpu, void *intercept_ctx,
+        void (*intercept)(void *));
 void z80_reset(z80 *cpu);
 void z80_debug(z80 *cpu);
 void z80_run(z80 *cpu);
 void Z80_destroy(z80 *cpu);
+
+#endif
 

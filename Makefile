@@ -1,5 +1,5 @@
 build:
-	gcc -o main console.c cpu.c main.c
+	gcc -g -o main console.c z80.c main.c
 clean:
 	rm -rf main
 all: clean build

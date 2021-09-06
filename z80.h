@@ -84,7 +84,7 @@ typedef struct {
 #define IR cpu->ir
 
 /*
-	Functions needed by the soft CPU implementation
+    Functions needed by the soft CPU implementation
 */
 void cpu_out(z80 *cpu, const uint32_t Port, const uint32_t Value);
 

@@ -1113,6 +1113,7 @@ x == (C - 1) & 0xff for IND
     INOUTFLAGS((HIGH_REGISTER(BC) & 0xa8) | ((HIGH_REGISTER(BC) == 0) << 6), x)
 
 z80 *z80_new() {
+    _console_init();
     z80 *cpu = calloc(1, sizeof(z80));
     z80_reset(cpu);
     return cpu;
@@ -4612,5 +4613,6 @@ end_decode:
 
 void z80_destroy(z80 *cpu) {
     free(cpu);
+    _console_reset();
 }
 

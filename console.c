@@ -23,7 +23,29 @@
  */
 
 #include <stdio.h>
+#include <termios.h>
 #include "console.h"
+
+static struct termios _old_term, _new_term;
+
+void _console_init(void) {
+    tcgetattr(0, &_old_term);
+    
+    _new_term = _old_term;
+    
+    _new_term.c_lflag &= ~ICANON; /* Input available immediately (no EOL needed) */
+    _new_term.c_lflag &= ~ECHO; /* Do not echo input characters */
+    _new_term.c_lflag &= ~ISIG; /* ^C and ^Z do not generate signals */
+    _new_term.c_iflag &= INLCR; /* Translate NL to CR on input */
+    
+    tcsetattr(0, TCSANOW, &_new_term); /* Apply changes immediately */
+    
+    setvbuf(stdout, (char *)NULL, _IONBF, 0); /* Disable stdout buffering */
+}
+
+void _console_reset(void) {
+    tcsetattr(0, TCSANOW, &_old_term);
+}
 
 unsigned char _getch(void) {
     return getchar();

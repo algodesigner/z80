@@ -1373,6 +1373,11 @@ void z80_debug(z80 *cpu) {
             _puthex16(cpu->watch);
             _puts("\r\n");
             break;
+        case 'q':
+            _puts("\r\n");
+            loop = false;
+            cpu->status = 1;
+            break;
         case '?':
             _puts("\r\n");
             _puts("Lowercase commands:\r\n");
@@ -1387,6 +1392,7 @@ void z80_debug(z80 *cpu) {
             _puts("  y - Dumps the page (IY) points to\r\n");
 //          _puts("  a - Dumps memory pointed by dmaAddr\r\n");
             _puts("  l - Disassembles from current PC\r\n");
+            _puts("  q - Quit simulation\r\n");
             _puts("Uppercase commands:\r\n");
             _puts("  B - Sets breakpoint at address\r\n");
             _puts("  C - Clears breakpoint\r\n");
@@ -1429,8 +1435,11 @@ void z80_run(z80 *cpu) {
             cpu->debug = 1;
             cpu->step = -1;
         }
-        if (cpu->debug)
+        if (cpu->debug) {
             z80_debug(cpu);
+            if (cpu->status)
+                break;
+        }
 #endif
 
         PCX = PC;

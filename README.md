@@ -6,4 +6,4 @@ The original `cpu.h` header file has been split into the `z80.h` interface defin
 
 The processor state has been moved to the z80 class so that multiple CPU instances can be created in the same process to emulate multi-processor systems.
 
-The CP/M related has been either removed to commented out to make the processor class a touch more generic.
+The CP/M related code has been either removed or commented out to make the processor class a touch more generic.
